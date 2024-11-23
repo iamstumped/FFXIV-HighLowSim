@@ -1,5 +1,7 @@
 # FFXIV High or Low Simulator
-Simulate the results of a game of "High or Low" against Tista-bie in Eulmore.
+Simulate the results of a game of "High or Low" against Tista-bie in Eulmore. This is done by randomly selecting the face-down cards. 
+
+At the default number of simulations (20 k), the results have just under 1% spread. Accuracy can be increased by running more simulations.
 
 ## Requirements
 - JDK 23 or newer.
