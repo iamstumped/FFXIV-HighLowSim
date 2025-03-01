@@ -3,6 +3,13 @@ Simulate the results of a game of "High or Low" against Tista-bie in Eulmore. Th
 
 At the default number of simulations (50 k), the results have just under 1% spread. Accuracy can be increased by running more simulations.
 
+### Copying results
+Users can optionally choose to automatically copy the cards and results to the clipboard after running the simulations.
+- This will be in the format `TistaCard1 TistaCard2 YourCard HighChance LowChance DrawChance` separated by tabs.
+- You will be prompted at the start of the program if you would like to enable this or not. Your choice will be used until you exit and reopen the program.
+- This has been designed to make it easy to paste into a spreadsheet. Tested with LibreOffice Calc, should work just fine with other programs.
+
+
 ## Requirements
 - JDK 23 or newer.
 
