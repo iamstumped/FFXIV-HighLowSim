@@ -1,5 +1,8 @@
 package highlowsim;
 
+import java.awt.Toolkit;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.StringSelection;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Scanner;
@@ -28,12 +31,15 @@ public class HighLowSim {
     public static void main(String[] args) {
         //constants
         int SIM_COUNT = 50000;
-        boolean SHOW_RESULTS = false;
+        boolean SHOW_RESULTS = false; //more verbose output. Shows the result of each sim.
         //variables
         int highCount, lowCount, drawCount;
         int input = 0;
-        char repeat = 'y';
+        char temp;
         boolean valid;
+        boolean copyResults;
+        boolean repeat = true;
+        String tempString, toClip = "";
         
         //objects
         Scanner keyboard = new Scanner(System.in);
@@ -52,7 +58,15 @@ public class HighLowSim {
             }
         }
         
-        while (repeat == 'y') {
+        //copying results to clipboard. Designed to be pasted into a spreadsheet
+        System.out.print("Enable copying the results to clipboard? (y/n): ");
+        temp = keyboard.nextLine().trim().charAt(0);
+        copyResults = (temp == 'y' || temp == '1');
+        Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+        
+        System.out.println((copyResults ? "\u001B[32m" : "\u001B[33m") + "Results will" + (copyResults ? " " : " not ") + "be copied.\u001B[0m\n");
+        
+        while (repeat) {
             //resetting
             highCount = lowCount = drawCount = 0;
             
@@ -168,17 +182,34 @@ public class HighLowSim {
 
             //show results
             System.out.println("\n--COMPLETE--\nSimulations run: " + SIM_COUNT + "\n" + "Elapsed time: " + String.format("%.03f", (endTime - startTime)/1000000.0) + " ms\n");
-
+            
+            //high
             if (highCount > lowCount) {System.out.print("\u001B[32m");}
-            System.out.println("High: " + highCount + " time" + (highCount != 1 ? "s, " : ", ") + String.format("%7.03f", (highCount/(float)SIM_COUNT)*100) + "% chance\u001B[0m");
-
+            tempString = String.format("%7.03f", (highCount/(float)SIM_COUNT)*100);
+            System.out.println("High: " + highCount + " time" + (highCount != 1 ? "s, " : ", ") + tempString + "% chance\u001B[0m");
+            if (copyResults) toClip = tempString;
+            
+            //low
             if (lowCount > highCount) {System.out.print("\u001B[32m");}
-            System.out.println("Low:  " + lowCount + " time" + (lowCount != 1 ? "s, " : ", ") + String.format("%7.03f", (lowCount/(float)SIM_COUNT)*100) + "% chance\u001B[0m");
-
-            System.out.println("Draw: " + drawCount + " time" + (drawCount != 1 ? "s, " : ", ") + String.format("%7.03f", (drawCount/(float)SIM_COUNT)*100) + "% chance\n");
-
+            tempString = String.format("%7.03f", (lowCount/(float)SIM_COUNT)*100);
+            System.out.println("Low:  " + lowCount + " time" + (lowCount != 1 ? "s, " : ", ") + tempString + "% chance\u001B[0m");
+            if (copyResults) toClip += "\t" + tempString;
+            
+            //draw
+            tempString = String.format("%7.03f", (drawCount/(float)SIM_COUNT)*100);
+            System.out.println("Draw: " + drawCount + " time" + (drawCount != 1 ? "s, " : ", ") + tempString + "% chance\n");
+            if (copyResults) toClip += "\t" + tempString;
+            
+            //adds the card values to the clipboard
+            if (copyResults) {
+                toClip = tistaHand[0] + "\t" + tistaHand[1] + "\t" + playerHand[0] + "\t" + toClip;
+                clipboard.setContents(new StringSelection(toClip), null);
+            }
+            
+            //run again prompt
             System.out.print("Run again? (y/n): ");
-            repeat = keyboard.nextLine().trim().charAt(0);
+            temp = keyboard.nextLine().trim().charAt(0);
+            repeat = (temp == 'y' || temp == '1');
             
             System.out.println("------------------\n\n");
         }
