@@ -12,6 +12,11 @@ Users can optionally choose to automatically copy the cards and results to the c
 
 ## Requirements
 - JDK 23 or newer.
+### Windows
+For whatever reason, the default Windows command prompt doesn't support ANSI codes by default. This can be fixed with a registry tweak. 
+A .bat file is included with each release that will set this for you, then run the program (assuming both are in the same directory). 
+* This is not an issue if you use the combined Terminal app.
+* This is not required to run the program, however it will make the output look messy if not set.
 
 ## Arguments
 You can specify the number of simulations to run by passing a number from the command line. The default is 50000.\
